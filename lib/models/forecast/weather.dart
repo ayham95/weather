@@ -13,7 +13,9 @@ abstract class Weather implements Built<Weather, WeatherBuilder> {
 
   static Serializer<Weather> get serializer => _$weatherSerializer;
 
-
+  String get main;
+  String get description;
+  String get icon;
 
 
   static Weather fromJson(String jsonString) {
