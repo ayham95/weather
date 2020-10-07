@@ -24,43 +24,46 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocProvider(
       create: (ctx) => widget.forecastBloc,
       child: BlocBuilder<ForecastBloc, ForecastState>(builder: (ctx, state) {
+        if (state is ForecastNotLoaded) {
+          return _ErrorScreen(errorMsg: state.errorMsg);
+        }
         return Scaffold(
           extendBody: true,
           extendBodyBehindAppBar: true,
           primary: true,
           body: state is ForecastLoaded
               ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: WeatherCard(
-                          forecast: state.forecasts[index],
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => BlocProvider.value(
-                                  value: widget.forecastBloc,
-                                  child: ForecastScreen(
-                                    forecast: state.forecasts[index],
-                                  ),
-                                ),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+              child: ListView.builder(
+                itemBuilder: (ctx, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: WeatherCard(
+                      forecast: state.forecasts[index],
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => BlocProvider.value(
+                              value: widget.forecastBloc,
+                              child: ForecastScreen(
+                                forecast: state.forecasts[index],
                               ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    itemCount: state.forecasts.length,
-                    padding: EdgeInsets.all(0),
-                  ))
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+                itemCount: state.forecasts.length,
+                padding: EdgeInsets.all(0),
+              ))
               : Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
         );
       }),
     );
@@ -125,6 +128,38 @@ class WeatherCard extends StatelessWidget {
                   ],
                 ))
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ErrorScreen extends StatelessWidget {
+  final String errorMsg;
+
+  const _ErrorScreen({Key key, this.errorMsg = ''}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                errorMsg,
+                style: TextStyle(color: Colors.black),
+              ),
+              FlatButton(
+                  onPressed: () => BlocProvider.of<ForecastBloc>(context)
+                      .add(CheckWeather()),
+                  child: Text(
+                    'Retry',
+                    style: TextStyle(color: Colors.redAccent),
+                  ))
+            ],
+          ),
         ),
       ),
     );

@@ -6,7 +6,6 @@ import 'package:maidscc_waether/repositories/forecast_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'forecast_event.dart';
-
 part 'forecast_state.dart';
 
 class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
@@ -21,22 +20,24 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
     ForecastEvent event,
   ) async* {
     if (event is CheckWeather) {
-      List<Forecast> forecasts =
-          await forecastRepository.getForecastData(errorCallback: (err) async* {
-        yield ForecastNotLoaded('An Error occurred!');
-      });
+      yield ForecastLoading();
+      try {
+        List<Forecast> forecasts = await forecastRepository.getForecastData();
 
-      // There's always a better way.. But for the sake of this example..
-      final filteredForecasts = [
-        forecasts.firstWhere((element) =>
-            DateTime.parse(element.date).day == DateTime.now().day),
-        forecasts.firstWhere((element) =>
-            DateTime.parse(element.date).day == DateTime.now().day + 1),
-        forecasts.firstWhere((element) =>
-            DateTime.parse(element.date).day == DateTime.now().day + 2),
-      ];
+        // There's always a better way.. But for the sake of this example..
+        final filteredForecasts = [
+          forecasts.firstWhere((element) =>
+              DateTime.parse(element.date).day == DateTime.now().day),
+          forecasts.firstWhere((element) =>
+              DateTime.parse(element.date).day == DateTime.now().day + 1),
+          forecasts.firstWhere((element) =>
+              DateTime.parse(element.date).day == DateTime.now().day + 2),
+        ];
 
-      yield ForecastLoaded(filteredForecasts);
+        yield ForecastLoaded(filteredForecasts);
+      } catch (e) {
+        yield ForecastNotLoaded('An Error occurred');
+      }
     }
   }
 }

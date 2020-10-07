@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:maidscc_waether/models/forecast.dart';
 
 import '../forecast_api_client.dart';
 
-typedef ErrorCallback = Function(String);
+typedef ErrorCallback = Stream Function(String);
 
 class ForecastRepository {
   List<Forecast> forecasts;
@@ -10,18 +12,19 @@ class ForecastRepository {
 
   ForecastRepository(this.forecastAPIClient)
       : assert(forecastAPIClient != null,
-            'Please provide a ForecastAPIClient to ForecastRepository instance..');
+  'Please provide a ForecastAPIClient to ForecastRepository instance..');
 
-  Future<List<Forecast>> getForecastData(
-      {forceRefresh = false, ErrorCallback errorCallback}) async {
+  Future<List<Forecast>> getForecastData({forceRefresh = false}) async {
     try {
-      if (forecasts == null || forceRefresh) {
+      if (forecasts == null || forceRefresh || forecasts.isEmpty) {
         forecasts = await forecastAPIClient.getData();
       }
+//      if (forecasts.isEmpty) throw'';
       return forecasts;
+    } on SocketException {
+      throw ('Check your internet connection');
     } catch (e) {
-      errorCallback(e);
-      throw 'Use ErrorCallback to get the error response';
+      throw(e);
     }
   }
 }
