@@ -57,11 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(0),
                   ))
               : Container(
-                  child: Text("FUCK!"),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
         );
       }),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.forecastBloc?.close();
+    super.dispose();
   }
 }
 
