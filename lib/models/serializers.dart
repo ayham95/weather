@@ -6,6 +6,8 @@ import 'package:built_value/standard_json_plugin.dart';
 import 'package:maidscc_waether/models/forecast.dart';
 import 'package:maidscc_waether/models/forecast/main_data.dart';
 import 'package:maidscc_waether/models/forecast/weather.dart';
+import 'package:maidscc_waether/models/forecast/wind.dart';
+import 'package:maidscc_waether/models/forecast_list.dart';
 
 part 'serializers.g.dart';
 
@@ -13,6 +15,8 @@ part 'serializers.g.dart';
   Forecast,
   MainData,
   Weather,
+  ForecastList,
+  Wind,
 ])
 final Serializers serializers =
     (_$serializers.toBuilder()..addPlugin(StandardJsonPlugin())).build();
