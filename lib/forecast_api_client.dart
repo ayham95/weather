@@ -13,10 +13,9 @@ class ForecastAPIClient {
 
   Future<List<Forecast>> getData() async {
     try {
-      final response = await get(_base_url);
+      final response = await client.get(_base_url);
       return ForecastList.fromJson(response.body).list.toList();
     } catch (e) {
-      print(e);
       throw e;
     }
   }

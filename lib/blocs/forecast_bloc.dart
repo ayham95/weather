@@ -36,7 +36,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
 
         yield ForecastLoaded(filteredForecasts);
       } catch (e) {
-        yield ForecastNotLoaded('An Error occurred');
+        yield ForecastNotLoaded('An error occurred');
       }
     }
   }

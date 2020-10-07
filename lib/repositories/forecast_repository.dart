@@ -19,12 +19,11 @@ class ForecastRepository {
       if (forecasts == null || forceRefresh || forecasts.isEmpty) {
         forecasts = await forecastAPIClient.getData();
       }
-//      if (forecasts.isEmpty) throw'';
       return forecasts;
     } on SocketException {
-      throw ('Check your internet connection');
+      throw 'Check your internet connection';
     } catch (e) {
-      throw(e);
+      throw 'An error occurred';
     }
   }
 }
