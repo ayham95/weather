@@ -23,18 +23,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       yield ForecastLoading();
       try {
         List<Forecast> forecasts = await forecastRepository.getForecastData();
-
-        // There's always a better way.. But for the sake of this example..
-        final filteredForecasts = [
-          forecasts.firstWhere((element) =>
-              DateTime.parse(element.date).day == DateTime.now().day),
-          forecasts.firstWhere((element) =>
-              DateTime.parse(element.date).day == DateTime.now().day + 1),
-          forecasts.firstWhere((element) =>
-              DateTime.parse(element.date).day == DateTime.now().day + 2),
-        ];
-
-        yield ForecastLoaded(filteredForecasts);
+        yield ForecastLoaded(forecasts);
       } catch (e) {
         yield ForecastNotLoaded('An error occurred');
       }

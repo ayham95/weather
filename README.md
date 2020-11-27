@@ -1,17 +1,22 @@
-# maidscc_waether
+# Waether
 
 Simple weather application
 
 ## Getting Started
 
+### Run the project
+To successfully build the project run:
+
+`flutter pub get`
+
+`flutter pub run build_runner build`
+
 The app has 2 main displays
 #### Home Screen
-Which contains a list of 3 days forecasting. Nothing serious done here
+Which contains a list of forecasting. Nothing serious done here
 (Added only the basic information)
 #### Forecast Screen
-Which contains the design almost exactly as the PDF.
-
-I designed the icons myself to match the PDF as much as possible.
+Showing simple details of a selected day.
 
 The app is tested on:
 * iPhone 11 pro

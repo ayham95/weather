@@ -13,12 +13,11 @@ class WeatherImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(code);
-
     return Hero(
       tag: heroTag,
-      child: Image.asset(
-        'assets/images/$code.png',
+      child: Image.network(
+        'https://openweathermap.org/img/wn/$code@4x.png',
+        fit: BoxFit.cover,
         height: size,
       ),
     );

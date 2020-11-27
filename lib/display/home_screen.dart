@@ -33,37 +33,37 @@ class _HomeScreenState extends State<HomeScreen> {
           primary: true,
           body: state is ForecastLoaded
               ? Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-              child: ListView.builder(
-                itemBuilder: (ctx, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: WeatherCard(
-                      forecast: state.forecasts[index],
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (ctx) => BlocProvider.value(
-                              value: widget.forecastBloc,
-                              child: ForecastScreen(
-                                forecast: state.forecasts[index],
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+                  child: ListView.builder(
+                    itemBuilder: (ctx, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: WeatherCard(
+                          forecast: state.forecasts[index],
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (ctx) => BlocProvider.value(
+                                  value: widget.forecastBloc,
+                                  child: ForecastScreen(
+                                    forecast: state.forecasts[index],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-                itemCount: state.forecasts.length,
-                padding: EdgeInsets.all(0),
-              ))
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    itemCount: state.forecasts.length,
+                    padding: EdgeInsets.all(0),
+                  ))
               : Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
         );
       }),
     );
@@ -88,14 +88,14 @@ class WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final date = DateTime.parse(forecast.date);
     final String day = date.day == DateTime.now().day
-        ? 'Today'
-        : DateFormat('EEEE').format(date);
+        ? "Today at ${DateFormat.jm().format(date)}"
+        : "${DateFormat('EEEE').format(date)} at ${DateFormat.jm().format(date)}";
     return GestureDetector(
       onTap: () {
         if (onTap != null) onTap();
       },
       child: Container(
-        height: MediaQuery.of(context).size.height / 3.5,
+        height: MediaQuery.of(context).size.height / 5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: UiUtils.getWeatherColor(forecast.weather.first.icon),
@@ -108,7 +108,7 @@ class WeatherCard extends StatelessWidget {
               child: WeatherImage(
                 heroTag: forecast.date,
                 code: forecast.weather.first.icon,
-                size: MediaQuery.of(context).size.height / 3,
+                size: MediaQuery.of(context).size.height / 5,
               ),
             ),
             Positioned(

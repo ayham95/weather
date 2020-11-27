@@ -29,7 +29,7 @@ class ForecastScreen extends StatelessWidget {
               child: WeatherImage(
                 code: forecast.weather.first.icon,
                 heroTag: forecast.date,
-                size: MediaQuery.of(context).size.height / 2,
+                size: MediaQuery.of(context).size.height / 3,
               ),
             ),
             Column(
