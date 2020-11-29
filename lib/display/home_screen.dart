@@ -10,9 +10,6 @@ import '../ui_utils.dart';
 import 'forecast_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final ForecastBloc forecastBloc;
-
-  const HomeScreen(this.forecastBloc, {Key key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -21,58 +18,49 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (ctx) => widget.forecastBloc,
-      child: BlocBuilder<ForecastBloc, ForecastState>(builder: (ctx, state) {
-        if (state is ForecastNotLoaded) {
-          return _ErrorScreen(errorMsg: state.errorMsg);
-        }
-        return Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          primary: true,
-          body: state is ForecastLoaded
-              ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
-                  child: ListView.builder(
-                    itemBuilder: (ctx, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: WeatherCard(
-                          forecast: state.forecasts[index],
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (ctx) => BlocProvider.value(
-                                  value: widget.forecastBloc,
-                                  child: ForecastScreen(
-                                    forecast: state.forecasts[index],
-                                  ),
+    return BlocBuilder<ForecastBloc, ForecastState>(builder: (ctx, state) {
+      if (state is ForecastNotLoaded) {
+        return _ErrorScreen(errorMsg: state.errorMsg);
+      }
+      return Scaffold(
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        primary: true,
+        body: state is ForecastLoaded
+            ? Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 32),
+                child: ListView.builder(
+                  itemBuilder: (ctx, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: WeatherCard(
+                        forecast: state.forecasts[index],
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => BlocProvider.value(
+                                value: BlocProvider.of<ForecastBloc>(context),
+                                child: ForecastScreen(
+                                  forecast: state.forecasts[index],
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                    itemCount: state.forecasts.length,
-                    padding: EdgeInsets.all(0),
-                  ))
-              : Container(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                  itemCount: state.forecasts.length,
+                  padding: EdgeInsets.all(0),
+                ))
+            : Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-        );
-      }),
-    );
-  }
-
-  @override
-  void dispose() {
-    widget.forecastBloc?.close();
-    super.dispose();
+              ),
+      );
+    });
   }
 }
 
