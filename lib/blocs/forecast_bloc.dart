@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:maidscc_waether/models/forecast.dart';
 import 'package:maidscc_waether/repositories/forecast_repository.dart';
 import 'package:meta/meta.dart';
