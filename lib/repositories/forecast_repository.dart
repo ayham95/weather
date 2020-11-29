@@ -4,20 +4,17 @@ import 'package:maidscc_waether/models/forecast.dart';
 
 import '../forecast_api_client.dart';
 
-typedef ErrorCallback = Stream Function(String);
-
 class ForecastRepository {
   List<Forecast> forecasts;
-  final ForecastAPIClient forecastAPIClient;
+  final ForecastAPIClient _forecastAPIClient;
 
-  ForecastRepository(this.forecastAPIClient)
-      : assert(forecastAPIClient != null,
-  'Please provide a ForecastAPIClient to ForecastRepository instance..');
+  ForecastRepository({ForecastAPIClient forecastAPIClient})
+      : _forecastAPIClient = forecastAPIClient ?? ForecastAPIClient();
 
   Future<List<Forecast>> getForecastData({forceRefresh = false}) async {
     try {
       if (forecasts == null || forceRefresh || forecasts.isEmpty) {
-        forecasts = await forecastAPIClient.getData();
+        forecasts = await _forecastAPIClient.getData();
       }
       return forecasts;
     } on SocketException {
